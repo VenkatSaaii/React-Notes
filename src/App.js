@@ -9,7 +9,7 @@ import { NoteProvider, useNoteContext } from "./NoteContext";
 function App() {
   return (
     <NoteProvider>
-      <AppContent />
+      <AppContent/>
     </NoteProvider>
   );
 }
