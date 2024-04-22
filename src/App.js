@@ -1,25 +1,40 @@
-// App.js
-import React, { useState, useEffect } from "react";
+import React from "react";
 import "./App.css";
 import NoteBookForm from "./components/NoteBookForm";
 import NoteList from "./components/NoteList";
 import SearchNotes from "./components/SearchNotes";
 import Modal from "./components/Modal";
+import { NoteProvider, useNoteContext } from "./NoteContext";
 
 function App() {
-  const [noteList, setNotesList] = useState([]);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [filteredNotes, setFilteredNotes] = useState([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [noteToUpdate, setNoteToUpdate] = useState(null);
+  return (
+    <NoteProvider>
+      <AppContent />
+    </NoteProvider>
+  );
+}
 
-  useEffect(() => {
+function AppContent() {
+  const {
+    noteList,
+    setNotesList,
+    searchTerm,
+    setSearchTerm,
+    filteredNotes,
+    setFilteredNotes,
+    isModalOpen,
+    setIsModalOpen,
+    noteToUpdate,
+    setNoteToUpdate,
+  } = useNoteContext();
+
+  React.useEffect(() => {
     setFilteredNotes(
       noteList.filter((note) =>
         note.title.toLowerCase().includes(searchTerm.toLowerCase())
       )
     );
-  }, [searchTerm, noteList]);
+  }, [searchTerm, noteList, setFilteredNotes]);
 
   const handleAddNote = (note) => {
     setNotesList([...noteList, note]);
@@ -65,7 +80,7 @@ function App() {
       <button onClick={handleOpenModal}>Add New Note</button>
 
       <NoteList
-        notes={filteredNotes}
+        notes={filteredNotes} // Pass filteredNotes to NoteList
         onDeleteNote={handleDeleteNote}
         onEditNote={handleEditNote}
       />
@@ -85,3 +100,4 @@ function App() {
 }
 
 export default App;
+
